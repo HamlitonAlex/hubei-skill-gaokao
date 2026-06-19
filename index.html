@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>湖北技能高考志愿辅助填报系统</title>
+    <link rel="stylesheet" href="css/style.css?v=2026061509">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+
+<!-- Top Navigation -->
+<div id="top-nav" class="top-nav"></div>
+
+<!-- ===== Home Page ===== -->
+<div id="page-home" class="page active">
+    <div class="home-hero">
+        <h1>湖北技能高考志愿辅助系统</h1>
+        <p>基于专业技能分、文化综合分双维度的智能志愿匹配，覆盖计算机类、护理类、机械类等10大专业类别</p>
+        <div class="home-category-selector">
+            <select id="homeCategorySelect">
+                <option value="">-- 请选择你的技能高考类别 --</option>
+                <option value="计算机类">计算机类 — 软件技术 · 计算机应用 · 大数据</option>
+                <option value="护理类">护理类 — 护理 · 助产 · 护理学</option>
+                <option value="机械类">机械类 — 机械设计制造 · 数控技术</option>
+                <option value="电气电子类">电气电子类 — 电气工程 · 电子信息 · 自动化</option>
+                <option value="建筑技术类">建筑技术类 — 土木工程 · 建筑工程 · 工程管理</option>
+                <option value="旅游类">旅游类 — 旅游管理 · 酒店管理 · 导游</option>
+                <option value="财经类">财经类 — 财务管理 · 会计学 · 国际贸易</option>
+                <option value="农学类">农学类 — 农学 · 现代农业技术</option>
+                <option value="汽车维修类">汽车维修类 — 汽车服务工程 · 新能源汽车</option>
+                <option value="学前教育专业">学前教育专业 — 学前教育 · 早期教育</option>
+            </select>
+            <button class="home-enter-btn" onclick="var v=document.getElementById('homeCategorySelect').value;if(v){selectCategory(v)}else{alert('请先选择一个专业类别')}">进入系统 →</button>
+            <button class="home-enter-btn" style="background:#10b981;margin-top:8px" onclick="navigate('matching')">直接输入分数 · 查看所有类别 →</button>
+        </div>
+    </div>
+
+    <!-- 关键时间节点提醒 -->
+    <div class="home-timeline">
+        <h2>关键时间节点</h2>
+        <div class="timeline-grid">
+            <div class="timeline-item timeline-past">
+                <div class="timeline-date">6月10日-15日</div>
+                <div class="timeline-title">技能操作考试</div>
+                <div class="timeline-desc">各专业类别技能操作考试时间</div>
+            </div>
+            <div class="timeline-item timeline-past">
+                <div class="timeline-date">6月25日左右</div>
+                <div class="timeline-title">成绩公布</div>
+                <div class="timeline-desc">技能考试成绩及文化综合考试成绩公布</div>
+            </div>
+            <div class="timeline-item timeline-active">
+                <div class="timeline-date">6月29日-7月2日</div>
+                <div class="timeline-title">本科批志愿填报</div>
+                <div class="timeline-desc">技能高考本科批志愿填报时间（请以官方通知为准）</div>
+            </div>
+            <div class="timeline-item timeline-upcoming">
+                <div class="timeline-date">7月5日-8月5日</div>
+                <div class="timeline-title">高职高专批志愿填报</div>
+                <div class="timeline-desc">技能高考高职高专批志愿填报时间（请以官方通知为准）</div>
+            </div>
+            <div class="timeline-item timeline-upcoming">
+                <div class="timeline-date">7月中旬-8月</div>
+                <div class="timeline-title">录取结果查询</div>
+                <div class="timeline-desc">各批次录取结果陆续公布</div>
+            </div>
+        </div>
+        <div class="timeline-notice">
+            <strong>重要提醒：</strong>以上时间节点仅供参考，具体时间以湖北省教育考试院官方公告为准。请密切关注官方通知，切勿错过填报截止时间！
+        </div>
+    </div>
+
+    <!-- 防诈骗提示 -->
+    <div class="home-anti-fraud">
+        <div class="anti-fraud-box">
+            <div class="anti-fraud-header">
+                <span class="anti-fraud-icon">!</span>
+                <h3>防诈骗提示与免责声明</h3>
+            </div>
+            <div class="anti-fraud-content">
+                <div class="anti-fraud-item">
+                    <strong>警惕虚假承诺：</strong>任何声称"包录取"、"内部指标"、"花钱就能上"的信息都是诈骗！志愿填报不存在任何"内部渠道"。
+                </div>
+                <div class="anti-fraud-item">
+                    <strong>认准官方渠道：</strong>志愿填报请务必通过湖北省教育考试院官方网站（www.hbea.edu.cn）进行，不要轻信第三方链接。
+                </div>
+                <div class="anti-fraud-item">
+                    <strong>保护个人信息：</strong>不要向陌生人透露你的准考证号、身份证号、密码等敏感信息。
+                </div>
+                <div class="anti-fraud-item">
+                    <strong>免费政策：</strong>湖北省技能高考志愿填报不收取任何费用，任何收费指导服务都需谨慎对待。
+                </div>
+                <div class="anti-fraud-item anti-fraud-disclaimer">
+                    <strong>免责声明：</strong>本系统为公益性质的辅助工具，所有数据来源于湖北省教育考试院公开发布的2023-2025年技能高考投档线和招生计划数据。数据仅供参考，实际填报以官方系统为准。使用本系统产生的任何后果，由使用者自行承担。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-steps">
+        <h2>3步完成志愿填报</h2>
+        <div class="steps-grid">
+            <div class="step-item">
+                <div class="step-num">1</div>
+                <h3>选择专业类别</h3>
+                <p>选择你的技能高考类别：计算机类、护理类、机械类等10个专业类别</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">2</div>
+                <h3>输入双维度分数</h3>
+                <p>输入专业技能分和文化综合分，系统自动计算总分并匹配</p>
+            </div>
+            <div class="step-item">
+                <div class="step-num">3</div>
+                <h3>生成志愿表</h3>
+                <p>查看冲稳保推荐，添加志愿并导出志愿表供参考填报</p>
+            </div>
+        </div>
+    </div>
+    <div class="home-links">
+        <a class="home-link" href="javascript:navigate('enrollment')">招生计划查询</a>
+        <a class="home-link" href="javascript:navigate('compare')">院校对比</a>
+        <a class="home-link" href="javascript:navigate('charts')">数据可视化</a>
+        <a class="home-link" href="javascript:navigate('help')">政策规则与帮助</a>
+    </div>
+    <div class="site-footer">
+        <p>本系统数据来源于湖北省教育考试院公开发布的2023-2025年技能高考投档线和招生计划数据</p>
+        <p>数据仅供参考，实际填报以官方系统为准 · <a href="javascript:navigate('help')">政策规则与帮助</a></p>
+    </div>
+</div>
+
+<!-- ===== Matching Page ===== -->
+<div id="page-matching" class="page">
+    <div id="matchingContent"></div>
+</div>
+
+<!-- ===== Volunteer Page ===== -->
+<div id="page-volunteer" class="page">
+    <div id="volunteerContent"></div>
+</div>
+
+<!-- ===== Compare Page ===== -->
+<div id="page-compare" class="page">
+    <div id="compareContent"></div>
+</div>
+
+<!-- ===== Charts Page ===== -->
+<div id="page-charts" class="page">
+    <div id="chartsContent"></div>
+</div>
+
+<!-- ===== Enrollment Page ===== -->
+<div id="page-enrollment" class="page">
+    <div id="enrollmentContent"></div>
+</div>
+
+<!-- ===== Help Page ===== -->
+<div id="page-help" class="page">
+    <div id="helpContent"></div>
+</div>
+
+<!-- Scripts -->
+<script src="js/data.js?v=2026061503"></script>
+<script src="js/app.js?v=2026061509"></script>
+
+</body>
+</html>
